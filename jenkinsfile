@@ -4,26 +4,37 @@ pipeline {
   stages {
     stage('Build') {
       steps {
-        sh build.sh'
+        //build docker image using build script file
+        sh 'build.sh'
       }
     }
+  stage('login') {
+      steps {
+           sh 'docker login -u $docker_username -p $docker_password'
+          }
+       }
+         
     stage('Deploy') {
       steps {
           sh 'deploy.sh'
+          if[[ $GIT_BRANCH=="orgin/dev" ]]; then
+}
          
 
         }
       }
     }
     
-  }
-Post {
-always { // Clean up cleanWs() 
-} 
-if{
-echo 'dev repo!' 
-} 
-else
- { 
-echo 'prod repo'
+  
+post {
+        always {
+            // Clean up stage
+            cleanWs()
+        }
+        success {
+            echo 'Pipeline completed successfully!'
+        }
+        failure {
+            echo 'Pipeline failed!'
+}
 }
