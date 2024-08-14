@@ -16,8 +16,10 @@ pipeline {
          
     stage('Deploy') {
       steps {
-          sh 'deploy.sh'
+    script {
           if[[ $GIT_BRANCH=="orgin/dev" ]]; then
+          sh 'deploy.sh'
+          
 }
          
 
