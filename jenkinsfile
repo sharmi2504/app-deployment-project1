@@ -1,34 +1,37 @@
 pipeline {
-  agent any
+    agent any
 
-  stages {
-    stage('Build') {
-      steps {
-        //build docker image using build script file
-        sh 'build.sh'
-      }
+    environment {
+        docker_username = credentials('docker-username-id') // Set up your Jenkins credentials
+        docker_password = credentials('docker-password-id')
     }
-  stage('login') {
-      steps {
-           sh 'docker login -u $docker_username -p $docker_password'
-          }
-       }
-         
-    stage('Deploy') {
-      steps {
-    script {
-          if[[ $GIT_BRANCH=="orgin/dev" ]]; then
-          sh 'deploy.sh'
-          
-}
-         
 
+    stages {
+        stage('Build') {
+            steps {
+                // Build Docker image using build script file
+                sh './build.sh'
+            }
         }
-      }
+        
+        stage('Login') {
+            steps {
+                sh 'docker login -u $docker_username -p $docker_password'
+            }
+        }
+        
+        stage('Deploy') {
+            steps {
+                script {
+                    if (env.GIT_BRANCH == "origin/dev") {
+                        sh './deploy.sh'
+                    }
+                }
+            }
+        }
     }
     
-  
-post {
+    post {
         always {
             // Clean up stage
             cleanWs()
@@ -38,5 +41,6 @@ post {
         }
         failure {
             echo 'Pipeline failed!'
-}
+        }
+    }
 }
