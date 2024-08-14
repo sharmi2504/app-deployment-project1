@@ -1,0 +1,8 @@
+version: '3'
+
+services:
+ webcointainer:
+  image: nginximage
+  ports: 
+   - "80:80"
+
