@@ -31,16 +31,4 @@ pipeline {
         }
     }
     
-    post {
-        always {
-            // Clean up stage
-            cleanWs()
-        }
-        success {
-            echo 'Pipeline completed successfully!'
-        }
-        failure {
-            echo 'Pipeline failed!'
-        }
-    }
-}
+    
