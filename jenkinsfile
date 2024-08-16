@@ -1,3 +1,4 @@
+
 pipeline {
     agent any
 
@@ -9,18 +10,18 @@ pipeline {
             }
         }
 
-    stages {
         stage('Login') {
             steps {
-               withCredentials([usernamePassword(credentialsId: 'docker-password-id', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
-                sh 'docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD'
+                withCredentials([usernamePassword(credentialsId: 'docker-password-id', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
+                    sh 'docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD'
+                }
             }
         }
-        
+
         stage('Deploy') {
             steps {
                 script {
-                    if (env.GIT_BRANCH == "origin/dev") {
+                    if (env.BRANCH_NAME == 'dev') {
                         sh './deploy.sh'
                     }
                 }
@@ -28,5 +29,3 @@ pipeline {
         }
     }
 }
-    
-    
