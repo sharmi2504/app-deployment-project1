@@ -1,7 +1,14 @@
 pipeline {
     agent any
 
-    stages {
+   stages {
+        stage ('changing the file permission') {
+            steps {
+                 sh 'chmod +x build.sh'
+                 sh 'chmod +x deploy.sh'
+            }
+        }
+
         stage('Build') {
             steps {
                 script {
@@ -17,8 +24,7 @@ pipeline {
                     sh 'echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin'
                 }
             }
-        }
-
+        
         stage('Deploy') {
             steps {
                 script {
