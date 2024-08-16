@@ -23,6 +23,9 @@ pipeline {
                 script {
                     if (env.BRANCH_NAME == 'dev') {
                         sh './deploy.sh'
+                    } else {
+                        echo "not on the dev branch"
+                    }
                     }
                 }
             }
