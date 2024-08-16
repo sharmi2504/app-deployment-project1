@@ -9,6 +9,7 @@ pipeline {
                     sh './build.sh'
                 }
             }
+        }
 
         stage('Login') {
             steps {
@@ -16,6 +17,7 @@ pipeline {
                     sh 'echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin'
                 }
             }
+        }
 
         stage('Deploy') {
             steps {
@@ -23,11 +25,12 @@ pipeline {
                     if (env.BRANCH_NAME == 'dev') {
                         sh './deploy.sh'
                     } else {
-                        echo "Skipping deploy for branch dev"
+                        echo "Skipping deploy for branch other than dev"
                     }
                 }
             }
         }
     }
 }
+
 
