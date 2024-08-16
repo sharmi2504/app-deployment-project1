@@ -1,6 +1,9 @@
-
 pipeline {
     agent any
+
+    environment {
+        DOCKER_CREDENTIALS_ID = 'docker-password-id' // Define environment variable for credentials ID
+    }
 
     stages {
         stage('Build') {
@@ -12,7 +15,8 @@ pipeline {
 
         stage('Login') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'docker-password-id', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
+                withCredentials([usernamePassword(credentialsId: "${env.DOCKER_CREDENTIALS_ID}", passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
+                    // Log in to Docker using credentials
                     sh 'docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD'
                 }
             }
@@ -21,14 +25,16 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
+                    // Deploy only if on the 'dev' branch
                     if (env.BRANCH_NAME == 'dev') {
                         sh './deploy.sh'
                     } else {
-                        echo "not on the dev branch"
-                    }
+                        echo "Not on the dev branch; skipping deployment."
                     }
                 }
             }
         }
     }
-}
+
+    
+
