@@ -20,7 +20,8 @@ pipeline {
             steps {
                 script {
                     if (env.BRANCH_NAME == 'dev') {
-                        sh './deploy.sh'
+                        sh 'docker tag nginximage sharmi2504/dev'
+                        sh 'docker push sharmi2504/dev'
                     } else {
                         echo "Skipping deploy for branch dev"
                     }
