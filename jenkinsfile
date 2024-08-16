@@ -5,27 +5,43 @@ pipeline {
         stage('Build') {
             steps {
                 script {
-                // Build Docker image using build script file
-                sh './build.sh'
+                    // Build Docker image using build script file
+                    sh './build.sh'
+                }
             }
         }
-}
 
         stage('Login') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'docker-password-id', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
-                    sh 'docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD'
+                    sh 'echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin'
                 }
             }
-        
+        }
+
         stage('Deploy') {
             steps {
                 script {
-                    if (BRANCH_NAME == 'dev') {
+                    if (env.BRANCH_NAME == 'dev') {
                         sh './deploy.sh'
+                    } else {
+                        echo "Skipping deploy for branch dev"
                     }
                 }
             }
+        }
+    }
+
+    post {
+        always {
+            echo 'Cleaning up...'
+            // Optional: Clean up resources or notify after pipeline execution
+        }
+        success {
+            echo 'Pipeline succeeded!'
+        }
+        failure {
+            echo 'Pipeline failed.'
         }
     }
 }
