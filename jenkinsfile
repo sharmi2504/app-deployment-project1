@@ -14,11 +14,9 @@ pipeline {
                     sh 'echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin'
                 }
             }
-        }
 
         stage('Deploy') {
             steps {
-                script {
                     if (env.BRANCH_NAME == 'dev') {
                         sh 'docker tag nginximage sharmi2504/dev'
                         sh 'docker push sharmi2504/dev'
