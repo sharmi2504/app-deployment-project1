@@ -4,9 +4,9 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                docker build -t nginximage .
-                }
+                sh 'docker build -t nginximage .'
             }
+        }
 
         stage('Login') {
             steps {
@@ -14,12 +14,14 @@ pipeline {
                     sh 'echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin'
                 }
             }
+        } // This closing bracket was missing
 
         stage('Deploy') {
             steps {
+                script {
                     if (env.BRANCH_NAME == 'dev') {
-                        sh 'docker tag nginximage sharmi2504/dev'
-                        sh 'docker push sharmi2504/dev'
+                        sh 'docker tag nginximage sharmi2504/nginx'
+                        sh 'docker push sharmi2504/nginx'
                     } else {
                         echo "Skipping deploy for branch dev"
                     }
@@ -41,4 +43,3 @@ pipeline {
         }
     }
 }
-
