@@ -4,12 +4,9 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                script {
-                    // Build Docker image using build script file
-                    sh './build.sh'
+                docker build -t nginximage .
                 }
             }
-        }
 
         stage('Login') {
             steps {
