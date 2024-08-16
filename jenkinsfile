@@ -1,10 +1,9 @@
 pipeline {
     agent any
-
-    environment {
-        docker_username = credentials('docker-username-id') // Set up your Jenkins credentials
-        docker_password = credentials('docker-password-id')
-    }
+{
+withCredentials([usernamePassword(credentialsId: 'docker-password-id', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
+    sh 'docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD'
+}
 
     stages {
         stage('Build') {
