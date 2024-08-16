@@ -25,16 +25,4 @@ pipeline {
             }
         }
 
-    post {
-        always {
-            echo 'Cleaning up...'
-            // Optional: Clean up resources or notify after pipeline execution
-        }
-        success {
-            echo 'Pipeline succeeded!'
-        }
-        failure {
-            echo 'Pipeline failed.'
-        }
-    }
-
+    
