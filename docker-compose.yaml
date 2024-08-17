@@ -2,7 +2,7 @@ version: '3'
 
 services:
  webcointainer:
-  image: nginximage
+  image: projectimage
   ports: 
    - "80:80"
 
