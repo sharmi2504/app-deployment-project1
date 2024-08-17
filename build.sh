@@ -2,4 +2,3 @@
 # build the docker image [nginx]
 docker build -t projectimage .
 
-
