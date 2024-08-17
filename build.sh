@@ -1,6 +1,3 @@
 #!/bin/bash
-docker stop mynignxcointainer
-docker rm mynignxcointainer
+# build the docker image [nginxiamge] 
 docker build -t nginximage .
-docker run -d --name mynignxcointainer -p 80:80 nginximage
-
