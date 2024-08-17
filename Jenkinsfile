@@ -1,29 +1,36 @@
 pipeline {
-  agent any
+    agent any
 
-  stages {
-    stage('Build') {
-      steps {
-        sh build.sh'
-      }
-    }
-    stage('Deploy') {
-      steps {
-          sh 'deploy.sh'
-         
-
+    stages {
+        stage('changing the file permission') {
+            steps {
+                sh 'chmod +x build.sh'
+                sh 'chmod +x deploy.sh'
+            }
         }
-      }
+
+        stage('Build') {
+            steps {
+                script {
+                    // Build Docker image using build script file
+                    sh './build.sh'
+                }
+            }
+        }
+
+        stage('Login') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'docker-password-id', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
+                    sh 'echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin'
+                }
+            }
+        }  
+        stage('Deploy') {
+            steps {
+                script {
+                    sh './deploy.sh'
+                    }
+                }
+            }
+        }
     }
-    
-  }
-Post {
-always { // Clean up cleanWs() 
-} 
-if{
-echo 'dev repo!' 
-} 
-else
- { 
-echo 'prod repo'
-}
