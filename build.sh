@@ -1,3 +1,3 @@
 #!/bin/bash
-#build docker image
+#build the docker image
 docker build -t projectimage .
