@@ -13,5 +13,3 @@ elif [ $GIT_BRANCH = "master" ]; then
     docker tag projectimage sharmi2504/prod 
     docker push sharmi2504/prod
 fi
-
-

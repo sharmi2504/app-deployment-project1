@@ -1,4 +1,5 @@
 #!/bin/bash
-# build docker image [nginx]
+#build the docker image
 docker build -t projectimage .
+
 
