@@ -14,7 +14,6 @@ pipeline {
                 script {
                     // Build Docker image using build script file
                     sh './build.sh'
-                    sh './deploy.sh'
                 }
             }
         }
